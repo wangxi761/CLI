@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <IsPackable>true</IsPackable>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>dotnet-tarsnet</ToolCommandName>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Tars.NET</Authors>
+    <Copyright>@2018 Tars.NET</Copyright>
+    <PackageLicenseUrl>https://github.com/TarsNET/rpc/blob/develop/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/TarsNET</PackageProjectUrl>
+    <PackageIconUrl>https://avatars2.githubusercontent.com/u/42412008?s=200&amp;amp;v=4</PackageIconUrl>
+    <PackageReleaseNotes>Tars.Net.CLI beta</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Antlr4.Runtime" Version="4.6.6-rc001" />
+    <PackageReference Include="Microsoft.Build" Version="15.8.166" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.9.0" />
+    <PackageReference Include="Microsoft.Extensions.CommandLineUtils" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.1" />
+  </ItemGroup>
+
+</Project>
