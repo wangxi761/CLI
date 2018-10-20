@@ -8,6 +8,15 @@ namespace Tars.Net.CLI.Grammar
 {
     public class TarsGrammarVisitor : GrammarBaseVisitor<CSharpSyntaxNode>
     {
+        private readonly string[] usings = new string[]
+        {
+            "System",
+            "System.Collections.Generic",
+            "System.Linq",
+            "System.Threading.Tasks",
+            "Tars.Net.Attributes"
+        };
+
         public override CSharpSyntaxNode VisitTarsDefinitions([NotNull] GrammarParser.TarsDefinitionsContext context)
         {
             var compilationUnit = SyntaxFactory.CompilationUnit();
@@ -15,7 +24,8 @@ namespace Tars.Net.CLI.Grammar
                 .Select(VisitTarsDefinition)
                 .ToMemberDeclarationSyntaxArray();
 
-            compilationUnit = compilationUnit.AddMembers(namespaces);
+            compilationUnit = compilationUnit.AddMembers(namespaces)
+                .AddUsings(usings.Select(i => SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(i))).ToArray());
             return compilationUnit;
         }
 
@@ -110,6 +120,7 @@ namespace Tars.Net.CLI.Grammar
         public override CSharpSyntaxNode VisitTypeDeclaration([NotNull] GrammarParser.TypeDeclarationContext context)
         {
             var name = context.GetText()
+                .Replace("vector<byte>", "byte[]", StringComparison.OrdinalIgnoreCase)
                 .Replace("vector<", "List<", StringComparison.OrdinalIgnoreCase)
                 .Replace("map<", "Dictionary<", StringComparison.OrdinalIgnoreCase);
             return SyntaxFactory.ParseTypeName(name);
@@ -123,12 +134,13 @@ namespace Tars.Net.CLI.Grammar
             }
             var name = SyntaxFactory.IdentifierName(context.name().GetText());
             var enumDec = SyntaxFactory.EnumDeclaration(name.GetFirstToken())
+                .AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword))
                 .AddMembers(context.enumDeclaration()
                     .Select(VisitEnumDeclaration)
                     .Select(i => i as EnumMemberDeclarationSyntax)
                     .Where(i => i != null)
                     .ToArray());
-            
+
             return enumDec;
         }
 
@@ -156,6 +168,9 @@ namespace Tars.Net.CLI.Grammar
             }
             var name = SyntaxFactory.IdentifierName(context.name().GetText());
             var interfaceDec = SyntaxFactory.InterfaceDeclaration(name.GetFirstToken())
+                .AddAttributeLists(SyntaxFactory.AttributeList(
+                    SyntaxFactory.SingletonSeparatedList(SyntaxFactory.Attribute(SyntaxFactory.IdentifierName("Rpc")))))
+                .AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword))
                 .AddMembers(context.methodDefinition()
                     .Select(VisitMethodDefinition)
                     .ToMemberDeclarationSyntaxArray());
@@ -178,13 +193,24 @@ namespace Tars.Net.CLI.Grammar
                     .Select(i => i as ParameterSyntax)
                     .Where(i => i != null)
                     .ToArray());
-            return methodDec;
+            return methodDec.WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken));
         }
 
         public override CSharpSyntaxNode VisitMethodParameterDefinition([NotNull] GrammarParser.MethodParameterDefinitionContext context)
         {
             var name = SyntaxFactory.IdentifierName(context.name().GetText());
-            var parameter = SyntaxFactory.Parameter(name.GetFirstToken());
+            var returnTypeDec = VisitTypeDeclaration(context.typeDeclaration()) as TypeSyntax;
+            var parameter = SyntaxFactory.Parameter(name.GetFirstToken())
+                .WithType(returnTypeDec);
+            if (context.GetText().StartsWith("out "))
+            {
+                parameter = parameter.AddModifiers(SyntaxFactory.Token(SyntaxKind.OutKeyword));
+            }
+            var value = context.fieldValue();
+            if (value != null)
+            {
+                parameter = parameter.WithDefault(SyntaxFactory.EqualsValueClause(SyntaxFactory.ParseExpression(value.GetText())));
+            }
             return parameter;
         }
     }

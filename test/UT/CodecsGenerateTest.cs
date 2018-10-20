@@ -1,10 +1,7 @@
 ﻿using Antlr4.Runtime;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Formatting;
 using Microsoft.CodeAnalysis.Formatting;
-using System;
 using System.IO;
-using Tars.Net.CLI;
 using Tars.Net.CLI.Grammar;
 using Xunit;
 
@@ -33,7 +30,13 @@ namespace UT
         [Fact]
         public void WhenOnlyNamespace()
         {
-            var expected = @"namespace OnlyNamespace
+            var expected = @"using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Tars.Net.Attributes;
+
+namespace OnlyNamespace
 {
 }
 
@@ -47,7 +50,13 @@ namespace OnlyNamespace.Test
         [Fact]
         public void WhenOnlyClass()
         {
-            var expected = @"namespace OnlyNamespace
+            var expected = @"using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Tars.Net.Attributes;
+
+namespace OnlyNamespace
 {
     [TarsStruct]
     public class C
@@ -61,7 +70,13 @@ namespace OnlyNamespace.Test
         [Fact]
         public void WhenOnlyField()
         {
-            var expected = @"namespace OnlyNamespace
+            var expected = @"using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Tars.Net.Attributes;
+
+namespace OnlyNamespace
 {
     [TarsStruct]
     public class C
@@ -73,7 +88,7 @@ namespace OnlyNamespace.Test
         [TarsStructProperty(5)]
         public string sServantName { get; set; } = """";
         [TarsStructProperty(7)]
-        public List<byte> sBuffer { get; set; }
+        public byte[] sBuffer { get; set; }
         [TarsStructProperty(9)]
         public Dictionary<string, string> context { get; set; }
     }
@@ -85,9 +100,15 @@ namespace OnlyNamespace.Test
         [Fact]
         public void WhenOnlyEnum()
         {
-            var expected = @"namespace OnlyNamespace
+            var expected = @"using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Tars.Net.Attributes;
+
+namespace OnlyNamespace
 {
-    enum EMTaskCommand
+    public enum EMTaskCommand
     {
         EM_CMD_START = -1,
         EM_CMD_STOP = 0,
@@ -96,6 +117,29 @@ namespace OnlyNamespace.Test
     }
 }".ReplaceLine();
             var result = Generate("OnlyEnum.tars");
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public void WhenOnlyInterface()
+        {
+            var expected = @"using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Tars.Net.Attributes;
+
+namespace OnlyNamespace
+{
+    [Rpc]
+    public interface Patch
+    {
+        Task<int> listFileInfo(string path, List<FileInfo> vf);
+        Task<int> download(string file, int pos, byte[] vb);
+        Task<int> preparePatchFile(string app, string serverName, string outpatchFile = ""test.cs"");
+    }
+}".ReplaceLine();
+            var result = Generate("OnlyInterface.tars");
             Assert.Equal(expected, result);
         }
     }

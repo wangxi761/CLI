@@ -1,0 +1,34 @@
+﻿module OnlyNamespace
+{
+    /**
+ *
+ * 发布服务的接口
+ *
+ **/
+interface Patch
+{
+    /**
+    * 获取路径下所有文件列表信息
+    * @param path, 目录路径, 路径中不能包含..
+    * @param vector<FileInfo>, 文件列表信息
+    * @return int, 返回0表示path是目录, 1表示path是文件, -1表示路径错误
+    */
+    int listFileInfo(string path, out vector<FileInfo> vf);
+
+    /**
+    * 下载文件
+    * @param file, 文件路径
+    * @param pos, 从什么位置开始下载
+    * @param vector<byte>, 文件内容
+    * @param int, 0:读取表示成功, 1:读取到文件末尾了, <0: 读取失败
+    */
+    int download(string file, int pos, out vector<byte> vb);
+
+    /**
+    * 准备好需要patch的文件
+    * @param patchFile, 需要发布的文件名
+    * @return int, 0: 成功, <0: 失败
+    */
+    int preparePatchFile(string app, string serverName, string outpatchFile = "test.cs");
+};
+};

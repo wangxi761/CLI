@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from D:\GIT\github\CLI\src\Gen\Grammar.g4 by ANTLR 4.6.6-rc001
+// Generated from D:\code\Tars\CLI\src\Gen\Grammar.g4 by ANTLR 4.6.6-rc001
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -33,7 +33,6 @@ using ParserRuleContext = Antlr4.Runtime.ParserRuleContext;
 /// of the available methods.
 /// </summary>
 [System.CodeDom.Compiler.GeneratedCode("ANTLR", "4.6.6-rc001")]
-[System.CLSCompliant(false)]
 public partial class GrammarBaseListener : IGrammarListener {
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="GrammarParser.tarsDefinitions"/>.

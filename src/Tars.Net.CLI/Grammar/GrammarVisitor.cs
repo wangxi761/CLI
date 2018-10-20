@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from D:\GIT\github\CLI\src\Gen\Grammar.g4 by ANTLR 4.6.6-rc001
+// Generated from D:\code\Tars\CLI\src\Gen\Grammar.g4 by ANTLR 4.6.6-rc001
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -30,7 +30,6 @@ using IToken = Antlr4.Runtime.IToken;
 /// </summary>
 /// <typeparam name="Result">The return type of the visit operation.</typeparam>
 [System.CodeDom.Compiler.GeneratedCode("ANTLR", "4.6.6-rc001")]
-[System.CLSCompliant(false)]
 public interface IGrammarVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="GrammarParser.tarsDefinitions"/>.
