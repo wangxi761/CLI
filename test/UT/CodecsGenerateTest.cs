@@ -81,6 +81,23 @@ namespace OnlyNamespace.Test
             var result = Generate("OnlyField.tars");
             Assert.Equal(expected, result);
         }
+
+        [Fact]
+        public void WhenOnlyEnum()
+        {
+            var expected = @"namespace OnlyNamespace
+{
+    enum EMTaskCommand
+    {
+        EM_CMD_START = -1,
+        EM_CMD_STOP = 0,
+        EM_CMD_PATCH,
+        EM_CMD_UNINSTALL
+    }
+}".ReplaceLine();
+            var result = Generate("OnlyEnum.tars");
+            Assert.Equal(expected, result);
+        }
     }
 
     public static class TestExtensions

@@ -1,5 +1,4 @@
 ﻿using Antlr4.Runtime.Misc;
-using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
@@ -56,8 +55,8 @@ namespace Tars.Net.CLI.Grammar
         {
             return new CSharpSyntaxNode[]
             {
+                VisitEnumDefinition(context.enumDefinition()),
                 VisitStructDefinition(context.structDefinition()),
-                //VisitEnumDefinition(context.enumDefinition()),
                 //VisitInterfaceDefinition(context.interfaceDefinition())
             }
             .FirstOrDefault(i => i != null);
@@ -89,7 +88,7 @@ namespace Tars.Net.CLI.Grammar
             {
                 typeDec = SyntaxFactory.NullableType(typeDec);
             }
-            
+
             var propertyDec = SyntaxFactory.PropertyDeclaration(typeDec, context.name().GetText())
                 .AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword))
                 .AddAttributeLists(SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(
@@ -114,6 +113,39 @@ namespace Tars.Net.CLI.Grammar
                 .Replace("vector<", "List<", StringComparison.OrdinalIgnoreCase)
                 .Replace("map<", "Dictionary<", StringComparison.OrdinalIgnoreCase);
             return SyntaxFactory.ParseTypeName(name);
+        }
+
+        public override CSharpSyntaxNode VisitEnumDefinition([NotNull] GrammarParser.EnumDefinitionContext context)
+        {
+            if (context == null)
+            {
+                return null;
+            }
+            var name = SyntaxFactory.IdentifierName(context.name().GetText());
+            var enumDec = SyntaxFactory.EnumDeclaration(name.GetFirstToken())
+                .AddMembers(context.enumDeclaration()
+                    .Select(VisitEnumDeclaration)
+                    .Select(i => i as EnumMemberDeclarationSyntax)
+                    .Where(i => i != null)
+                    .ToArray());
+            
+            return enumDec;
+        }
+
+        public override CSharpSyntaxNode VisitEnumDeclaration([NotNull] GrammarParser.EnumDeclarationContext context)
+        {
+            if (context == null)
+            {
+                return null;
+            }
+            var name = SyntaxFactory.IdentifierName(context.name().GetText());
+            var enumMemberDec = SyntaxFactory.EnumMemberDeclaration(name.GetFirstToken());
+            var value = context.fieldValue();
+            if (value != null)
+            {
+                enumMemberDec = enumMemberDec.WithEqualsValue(SyntaxFactory.EqualsValueClause(SyntaxFactory.ParseExpression(value.GetText())));
+            }
+            return enumMemberDec;
         }
     }
 }

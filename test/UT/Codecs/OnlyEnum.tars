@@ -1,0 +1,13 @@
+﻿module OnlyNamespace
+{
+    /**
+    * 管理平台过来的命令
+    */
+    enum EMTaskCommand
+    {
+        EM_CMD_START = -1,
+        EM_CMD_STOP = 0,
+        EM_CMD_PATCH,
+        EM_CMD_UNINSTALL
+    };
+};
