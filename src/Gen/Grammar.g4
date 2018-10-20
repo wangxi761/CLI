@@ -10,7 +10,7 @@ tarsDefinition
 includeDefinition: '#include' String;
 
 moduleDefinition
-    : 'module' moduleName '{' memberDefinition* '}' ';'*
+    : 'module' moduleName '{' memberDefinition* '}' ';'?
     ;
 
 memberDefinition
@@ -25,48 +25,47 @@ moduleName
     ;
 
 interfaceDefinition
-    : 'interface' ID '{' methodDefinition*  '}' ';'*
+    : 'interface' name '{' methodDefinition*  '}' ';'?
     ;
 
 methodDefinition
-    : typeDeclaration ID '(' methodParameterDefinition*  ')' ';'
+    : typeDeclaration name '(' methodParameterDefinition*  ')' ';'
     ;
 
 methodParameterDefinition
-    : typeDeclaration ID ','*
-    | 'out' typeDeclaration ID ','*
+    : typeDeclaration name ','?
+    | 'out' typeDeclaration name ','?
     ;
 
 structDefinition
-    : 'struct' ID '{' fieldDefinition*  '}' ';'*
+    : 'struct' name '{' fieldDefinition*  '}' ';'?
     ;
 
 fieldDefinition
-    : Int fieldOption typeDeclaration ID fieldValue* ';'
+    : fieldOrder fieldOption typeDeclaration name '='? fieldValue? ';'
     ;
+
+fieldOrder: Int;
 
 fieldOption: 'require' | 'optional';
 
 fieldValue
-    : '=' Int
-    | '=' Float
-    | '=' String
+    : Int
+    | Float
+    | String
     ;
 
 typeDeclaration
     : ID
-    | 'short'
-    | 'byte'
-    | 'int'
-    | 'string'
     | 'vector' '<'typeDeclaration '>'
     | 'map' '<'typeDeclaration ',' typeDeclaration '>'
-    | 'void'
     ;
 
-enumDefinition: 'enum' ID '{' enumDeclaration*  '}' ';'*;
+enumDefinition: 'enum' name '{' enumDeclaration*  '}' ';'?;
 
-enumDeclaration: ID fieldValue* ','*;
+enumDeclaration: name '='? fieldValue? ','?;
+
+name: ID;
 
 //------ Identifiers
 ID : ID_Letter (ID_Letter | Digit)* ;

@@ -17,10 +17,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="ff\a.tars">
+    <None Update="Codecs\OnlyField.tars">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ff\TextFile1.txt">
+    <None Update="Codecs\OnlyClass.tars">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Codecs\OnlyNamespace.tars">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ff\test\a.tars">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ff\test\TextFile1.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

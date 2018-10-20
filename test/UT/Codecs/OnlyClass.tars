@@ -1,0 +1,6 @@
+﻿module OnlyNamespace
+{
+    struct C
+    {
+    };
+};

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from D:\code\Tars\CLI\src\Gen\Grammar.g4 by ANTLR 4.6.6-rc001
+// Generated from D:\GIT\github\CLI\src\Gen\Grammar.g4 by ANTLR 4.6.6-rc001
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -19,7 +19,7 @@
 // Ambiguous reference in cref attribute
 #pragma warning disable 419
 
-namespace Tars.Net.CLI {
+namespace Tars.Net.CLI.Grammar {
 using Antlr4.Runtime.Misc;
 using IParseTreeListener = Antlr4.Runtime.Tree.IParseTreeListener;
 using IToken = Antlr4.Runtime.IToken;
@@ -153,6 +153,17 @@ public interface IGrammarListener : IParseTreeListener {
 	void ExitFieldDefinition([NotNull] GrammarParser.FieldDefinitionContext context);
 
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="GrammarParser.fieldOrder"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterFieldOrder([NotNull] GrammarParser.FieldOrderContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="GrammarParser.fieldOrder"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitFieldOrder([NotNull] GrammarParser.FieldOrderContext context);
+
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="GrammarParser.fieldOption"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -206,5 +217,16 @@ public interface IGrammarListener : IParseTreeListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	void ExitEnumDeclaration([NotNull] GrammarParser.EnumDeclarationContext context);
+
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="GrammarParser.name"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterName([NotNull] GrammarParser.NameContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="GrammarParser.name"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitName([NotNull] GrammarParser.NameContext context);
 }
-} // namespace Tars.Net.CLI
+} // namespace Tars.Net.CLI.Grammar

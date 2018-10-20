@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from D:\code\Tars\CLI\src\Gen\Grammar.g4 by ANTLR 4.6.6-rc001
+// Generated from D:\GIT\github\CLI\src\Gen\Grammar.g4 by ANTLR 4.6.6-rc001
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -19,7 +19,7 @@
 // Ambiguous reference in cref attribute
 #pragma warning disable 419
 
-namespace Tars.Net.CLI {
+namespace Tars.Net.CLI.Grammar {
 
 using Antlr4.Runtime.Misc;
 using IErrorNode = Antlr4.Runtime.Tree.IErrorNode;
@@ -179,6 +179,19 @@ public partial class GrammarBaseListener : IGrammarListener {
 	public virtual void ExitFieldDefinition([NotNull] GrammarParser.FieldDefinitionContext context) { }
 
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="GrammarParser.fieldOrder"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterFieldOrder([NotNull] GrammarParser.FieldOrderContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="GrammarParser.fieldOrder"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitFieldOrder([NotNull] GrammarParser.FieldOrderContext context) { }
+
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="GrammarParser.fieldOption"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
@@ -243,6 +256,19 @@ public partial class GrammarBaseListener : IGrammarListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitEnumDeclaration([NotNull] GrammarParser.EnumDeclarationContext context) { }
 
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="GrammarParser.name"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterName([NotNull] GrammarParser.NameContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="GrammarParser.name"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitName([NotNull] GrammarParser.NameContext context) { }
+
 	/// <inheritdoc/>
 	/// <remarks>The default implementation does nothing.</remarks>
 	public virtual void EnterEveryRule([NotNull] ParserRuleContext context) { }
@@ -256,4 +282,4 @@ public partial class GrammarBaseListener : IGrammarListener {
 	/// <remarks>The default implementation does nothing.</remarks>
 	public virtual void VisitErrorNode([NotNull] IErrorNode node) { }
 }
-} // namespace Tars.Net.CLI
+} // namespace Tars.Net.CLI.Grammar

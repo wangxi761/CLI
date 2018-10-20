@@ -1,4 +1,6 @@
 ﻿using Antlr4.Runtime;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Formatting;
 using Microsoft.Extensions.CommandLineUtils;
 using System;
 using System.Collections.Generic;
@@ -10,7 +12,14 @@ namespace Tars.Net.CLI
 {
     public class CodecsCommand : ICommand
     {
+        private readonly AdhocWorkspace workspace;
+
         public string Name => "codecs";
+
+        public CodecsCommand()
+        {
+            workspace = new AdhocWorkspace();
+        }
 
         public void Execute(CommandLineApplication command)
         {
@@ -40,14 +49,18 @@ namespace Tars.Net.CLI
             });
         }
 
-        public void Generate(string[] files, string value)
+        public void Generate(string[] files, string dest)
         {
-            using (var stream = File.OpenRead(files[0]))
+            foreach (var file in files)
             {
-                var lexer = new GrammarLexer(new AntlrInputStream(stream));
-                var parser = new GrammarParser(new CommonTokenStream(lexer));
-                var visitor = new TarsGrammarVisitor();
-                var a = visitor.Visit(parser.tarsDefinitions());
+                using (var stream = File.OpenRead(file))
+                {
+                    var lexer = new GrammarLexer(new AntlrInputStream(stream));
+                    var parser = new GrammarParser(new CommonTokenStream(lexer));
+                    var visitor = new TarsGrammarVisitor();
+                    var a = Formatter.Format(visitor.Visit(parser.tarsDefinitions()), workspace);
+                    File.WriteAllText(Path.Combine(dest, Path.GetFileNameWithoutExtension(file) + ".cs"), a.ToFullString());
+                }
             }
         }
 

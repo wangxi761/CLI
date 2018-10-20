@@ -9,7 +9,7 @@ namespace UT
         [Fact]
         public void TestFindAllTarsFileWhenExistsDirectory()
         {
-            var dir = Directory.GetParent(Directory.GetCurrentDirectory()).FullName;
+            var dir = Path.Combine(Directory.GetCurrentDirectory(), "ff");
             var tarsFiles = new CodecsCommand().FindAllTarsFile(dir);
             Assert.Single(tarsFiles);
             Assert.EndsWith("a.tars", tarsFiles[0]);
@@ -20,7 +20,7 @@ namespace UT
         [Fact]
         public void TestFindAllTarsFileWhenExistsFile()
         {
-            var file = Path.Combine(Directory.GetCurrentDirectory(), "ff", "a.tars");
+            var file = Path.Combine(Directory.GetCurrentDirectory(), "ff", "test", "a.tars");
             var tarsFiles = new CodecsCommand().FindAllTarsFile(file);
             Assert.Single(tarsFiles);
             Assert.EndsWith("a.tars", tarsFiles[0]);

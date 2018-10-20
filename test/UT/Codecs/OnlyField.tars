@@ -1,0 +1,11 @@
+﻿module OnlyNamespace
+{
+    struct C
+    {
+		1  require short        iVersion;
+        2  optional byte         cPacketType  = 0;
+        5  optional string       sServantName = "";
+        7  optional vector<byte> sBuffer;
+        9  require map<string, string> context;
+    };
+};
