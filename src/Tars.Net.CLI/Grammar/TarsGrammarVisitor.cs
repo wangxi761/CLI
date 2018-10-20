@@ -57,7 +57,7 @@ namespace Tars.Net.CLI.Grammar
             {
                 VisitEnumDefinition(context.enumDefinition()),
                 VisitStructDefinition(context.structDefinition()),
-                //VisitInterfaceDefinition(context.interfaceDefinition())
+                VisitInterfaceDefinition(context.interfaceDefinition())
             }
             .FirstOrDefault(i => i != null);
         }
@@ -146,6 +146,46 @@ namespace Tars.Net.CLI.Grammar
                 enumMemberDec = enumMemberDec.WithEqualsValue(SyntaxFactory.EqualsValueClause(SyntaxFactory.ParseExpression(value.GetText())));
             }
             return enumMemberDec;
+        }
+
+        public override CSharpSyntaxNode VisitInterfaceDefinition([NotNull] GrammarParser.InterfaceDefinitionContext context)
+        {
+            if (context == null)
+            {
+                return null;
+            }
+            var name = SyntaxFactory.IdentifierName(context.name().GetText());
+            var interfaceDec = SyntaxFactory.InterfaceDeclaration(name.GetFirstToken())
+                .AddMembers(context.methodDefinition()
+                    .Select(VisitMethodDefinition)
+                    .ToMemberDeclarationSyntaxArray());
+
+            return interfaceDec;
+        }
+
+        public override CSharpSyntaxNode VisitMethodDefinition([NotNull] GrammarParser.MethodDefinitionContext context)
+        {
+            var name = SyntaxFactory.IdentifierName(context.name().GetText());
+            var returnTypeDec = VisitTypeDeclaration(context.typeDeclaration()) as TypeSyntax;
+            var info = returnTypeDec.GetFirstToken().Text;
+            returnTypeDec = SyntaxFactory.ParseName(string.Equals("void", info, StringComparison.OrdinalIgnoreCase)
+                    ? "Task"
+                    : $"Task<{info}>");
+
+            var methodDec = SyntaxFactory.MethodDeclaration(returnTypeDec, name.GetFirstToken())
+                .AddParameterListParameters(context.methodParameterDefinition()
+                    .Select(VisitMethodParameterDefinition)
+                    .Select(i => i as ParameterSyntax)
+                    .Where(i => i != null)
+                    .ToArray());
+            return methodDec;
+        }
+
+        public override CSharpSyntaxNode VisitMethodParameterDefinition([NotNull] GrammarParser.MethodParameterDefinitionContext context)
+        {
+            var name = SyntaxFactory.IdentifierName(context.name().GetText());
+            var parameter = SyntaxFactory.Parameter(name.GetFirstToken());
+            return parameter;
         }
     }
 }

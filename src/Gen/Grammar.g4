@@ -33,8 +33,7 @@ methodDefinition
     ;
 
 methodParameterDefinition
-    : typeDeclaration name ','?
-    | 'out' typeDeclaration name ','?
+    : Out? typeDeclaration name '='? fieldValue? ','?
     ;
 
 structDefinition
@@ -69,6 +68,7 @@ name: ID;
 
 //------ Identifiers
 ID : ID_Letter (ID_Letter | Digit)* ;
+Out: 'out';
 fragment ID_Letter : 'a'..'z' | 'A'..'Z' | '_' ;
 fragment Digit : '0'..'9';
 fragment Number : Digit | '-' Digit;
