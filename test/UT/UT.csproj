@@ -17,6 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Codecs\OnlyInclude.tars">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Codecs\OnlyInterface.tars">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

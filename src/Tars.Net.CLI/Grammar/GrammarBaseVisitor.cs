@@ -34,17 +34,6 @@ using ParserRuleContext = Antlr4.Runtime.ParserRuleContext;
 [System.CodeDom.Compiler.GeneratedCode("ANTLR", "4.6.6-rc001")]
 public partial class GrammarBaseVisitor<Result> : AbstractParseTreeVisitor<Result>, IGrammarVisitor<Result> {
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="GrammarParser.tarsDefinitions"/>.
-	/// <para>
-	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
-	/// on <paramref name="context"/>.
-	/// </para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	public virtual Result VisitTarsDefinitions([NotNull] GrammarParser.TarsDefinitionsContext context) { return VisitChildren(context); }
-
-	/// <summary>
 	/// Visit a parse tree produced by <see cref="GrammarParser.tarsDefinition"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>

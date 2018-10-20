@@ -32,13 +32,6 @@ using IToken = Antlr4.Runtime.IToken;
 [System.CodeDom.Compiler.GeneratedCode("ANTLR", "4.6.6-rc001")]
 public interface IGrammarVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="GrammarParser.tarsDefinitions"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitTarsDefinitions([NotNull] GrammarParser.TarsDefinitionsContext context);
-
-	/// <summary>
 	/// Visit a parse tree produced by <see cref="GrammarParser.tarsDefinition"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>

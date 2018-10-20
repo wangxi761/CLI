@@ -1,12 +1,17 @@
-﻿using Antlr4.Runtime.Misc;
+﻿using Antlr4.Runtime;
+using Antlr4.Runtime.Misc;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Formatting;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Tars.Net.CLI.Grammar
 {
-    public class TarsGrammarVisitor : GrammarBaseVisitor<CSharpSyntaxNode>
+    public class TarsGrammarVisitor : GrammarBaseVisitor<SyntaxNode>
     {
         private readonly string[] usings = new string[]
         {
@@ -16,35 +21,54 @@ namespace Tars.Net.CLI.Grammar
             "System.Threading.Tasks",
             "Tars.Net.Attributes"
         };
+        private readonly string file;
 
-        public override CSharpSyntaxNode VisitTarsDefinitions([NotNull] GrammarParser.TarsDefinitionsContext context)
+        public TarsGrammarVisitor(string file)
+        {
+            this.file = file;
+        }
+
+        public override SyntaxNode VisitTarsDefinition([NotNull] GrammarParser.TarsDefinitionContext context)
         {
             var compilationUnit = SyntaxFactory.CompilationUnit();
-            var namespaces = context.tarsDefinition()
-                .Select(VisitTarsDefinition)
+            var namespaces = context.moduleDefinition()
+                .Select(VisitModuleDefinition)
                 .ToMemberDeclarationSyntaxArray();
 
+            var usingDecs = usings.Select(i => SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(i)))
+                .Union(context.includeDefinition()
+                    .SelectMany(GetUsingDirective))
+                .Where(i => i != null)
+                .ToArray();
+
             compilationUnit = compilationUnit.AddMembers(namespaces)
-                .AddUsings(usings.Select(i => SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(i))).ToArray());
+                .AddUsings(usingDecs);
             return compilationUnit;
         }
 
-        public override CSharpSyntaxNode VisitTarsDefinition([NotNull] GrammarParser.TarsDefinitionContext context)
+        private IEnumerable<UsingDirectiveSyntax> GetUsingDirective(GrammarParser.IncludeDefinitionContext context)
         {
-            return new CSharpSyntaxNode[]
+            var newfile = context.String().GetText();
+            var newPath = file.Replace(Path.GetFileName(file), newfile.Replace("\"", ""));
+            if (File.Exists(newPath))
             {
-                //VisitIncludeDefinition(context.includeDefinition()),
-                VisitModuleDefinition(context.moduleDefinition())
+                using (var stream = File.OpenRead(newPath))
+                {
+                    var lexer = new GrammarLexer(new AntlrInputStream(stream));
+                    var parser = new GrammarParser(new CommonTokenStream(lexer));
+                    var syntax = Visit(parser.tarsDefinition()) as CompilationUnitSyntax;
+                    return syntax.Members.Select(i => i as NamespaceDeclarationSyntax)
+                        .Where(i => i != null)
+                        .Select(i => SyntaxFactory.UsingDirective(i.Name));
+                }
             }
-            .FirstOrDefault(i => i != null);
+            else
+            {
+                return new UsingDirectiveSyntax[0];
+            }
         }
 
-        //public override CSharpSyntaxNode VisitIncludeDefinition([NotNull] GrammarParser.IncludeDefinitionContext context)
-        //{
-        //    return null;
-        //}
-
-        public override CSharpSyntaxNode VisitModuleDefinition([NotNull] GrammarParser.ModuleDefinitionContext context)
+        public override SyntaxNode VisitModuleDefinition([NotNull] GrammarParser.ModuleDefinitionContext context)
         {
             if (context == null)
             {
@@ -61,9 +85,9 @@ namespace Tars.Net.CLI.Grammar
             return namespaceDec;
         }
 
-        public override CSharpSyntaxNode VisitMemberDefinition([NotNull] GrammarParser.MemberDefinitionContext context)
+        public override SyntaxNode VisitMemberDefinition([NotNull] GrammarParser.MemberDefinitionContext context)
         {
-            return new CSharpSyntaxNode[]
+            return new SyntaxNode[]
             {
                 VisitEnumDefinition(context.enumDefinition()),
                 VisitStructDefinition(context.structDefinition()),
@@ -72,7 +96,7 @@ namespace Tars.Net.CLI.Grammar
             .FirstOrDefault(i => i != null);
         }
 
-        public override CSharpSyntaxNode VisitStructDefinition([NotNull] GrammarParser.StructDefinitionContext context)
+        public override SyntaxNode VisitStructDefinition([NotNull] GrammarParser.StructDefinitionContext context)
         {
             if (context == null)
             {
@@ -89,7 +113,7 @@ namespace Tars.Net.CLI.Grammar
             return classDec;
         }
 
-        public override CSharpSyntaxNode VisitFieldDefinition([NotNull] GrammarParser.FieldDefinitionContext context)
+        public override SyntaxNode VisitFieldDefinition([NotNull] GrammarParser.FieldDefinitionContext context)
         {
             var typeDec = VisitTypeDeclaration(context.typeDeclaration()) as TypeSyntax;
             if (string.Equals("optional", context.fieldOption().GetText())
@@ -117,7 +141,7 @@ namespace Tars.Net.CLI.Grammar
             return propertyDec;
         }
 
-        public override CSharpSyntaxNode VisitTypeDeclaration([NotNull] GrammarParser.TypeDeclarationContext context)
+        public override SyntaxNode VisitTypeDeclaration([NotNull] GrammarParser.TypeDeclarationContext context)
         {
             var name = context.GetText()
                 .Replace("vector<byte>", "byte[]", StringComparison.OrdinalIgnoreCase)
@@ -126,7 +150,7 @@ namespace Tars.Net.CLI.Grammar
             return SyntaxFactory.ParseTypeName(name);
         }
 
-        public override CSharpSyntaxNode VisitEnumDefinition([NotNull] GrammarParser.EnumDefinitionContext context)
+        public override SyntaxNode VisitEnumDefinition([NotNull] GrammarParser.EnumDefinitionContext context)
         {
             if (context == null)
             {
@@ -144,7 +168,7 @@ namespace Tars.Net.CLI.Grammar
             return enumDec;
         }
 
-        public override CSharpSyntaxNode VisitEnumDeclaration([NotNull] GrammarParser.EnumDeclarationContext context)
+        public override SyntaxNode VisitEnumDeclaration([NotNull] GrammarParser.EnumDeclarationContext context)
         {
             if (context == null)
             {
@@ -160,7 +184,7 @@ namespace Tars.Net.CLI.Grammar
             return enumMemberDec;
         }
 
-        public override CSharpSyntaxNode VisitInterfaceDefinition([NotNull] GrammarParser.InterfaceDefinitionContext context)
+        public override SyntaxNode VisitInterfaceDefinition([NotNull] GrammarParser.InterfaceDefinitionContext context)
         {
             if (context == null)
             {
@@ -178,7 +202,7 @@ namespace Tars.Net.CLI.Grammar
             return interfaceDec;
         }
 
-        public override CSharpSyntaxNode VisitMethodDefinition([NotNull] GrammarParser.MethodDefinitionContext context)
+        public override SyntaxNode VisitMethodDefinition([NotNull] GrammarParser.MethodDefinitionContext context)
         {
             var name = SyntaxFactory.IdentifierName(context.name().GetText());
             var returnTypeDec = VisitTypeDeclaration(context.typeDeclaration()) as TypeSyntax;
@@ -196,7 +220,7 @@ namespace Tars.Net.CLI.Grammar
             return methodDec.WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken));
         }
 
-        public override CSharpSyntaxNode VisitMethodParameterDefinition([NotNull] GrammarParser.MethodParameterDefinitionContext context)
+        public override SyntaxNode VisitMethodParameterDefinition([NotNull] GrammarParser.MethodParameterDefinitionContext context)
         {
             var name = SyntaxFactory.IdentifierName(context.name().GetText());
             var returnTypeDec = VisitTypeDeclaration(context.typeDeclaration()) as TypeSyntax;

@@ -16,13 +16,14 @@ namespace UT
 
         private string Generate(string file)
         {
-            using (var stream = File.OpenRead(GetTestFile(file)))
+            var f = GetTestFile(file);
+            using (var stream = File.OpenRead(f))
             {
                 var lexer = new GrammarLexer(new AntlrInputStream(stream));
                 var parser = new GrammarParser(new CommonTokenStream(lexer));
-                var visitor = new TarsGrammarVisitor();
+                var visitor = new TarsGrammarVisitor(f);
                 AdhocWorkspace cw = new AdhocWorkspace();
-                var formattedNode = Formatter.Format(visitor.Visit(parser.tarsDefinitions()), cw);
+                var formattedNode = Formatter.Format(visitor.Visit(parser.tarsDefinition()), cw);
                 return formattedNode.ToFullString();
             }
         }
@@ -140,6 +141,23 @@ namespace OnlyNamespace
     }
 }".ReplaceLine();
             var result = Generate("OnlyInterface.tars");
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public void WhenOnlyInclude()
+        {
+            var expected = @"using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Tars.Net.Attributes;
+using OnlyNamespace;
+
+namespace Test
+{
+}".ReplaceLine();
+            var result = Generate("OnlyInclude.tars");
             Assert.Equal(expected, result);
         }
     }

@@ -57,9 +57,9 @@ namespace Tars.Net.CLI
                 {
                     var lexer = new GrammarLexer(new AntlrInputStream(stream));
                     var parser = new GrammarParser(new CommonTokenStream(lexer));
-                    var visitor = new TarsGrammarVisitor();
-                    var a = Formatter.Format(visitor.Visit(parser.tarsDefinitions()), workspace);
-                    File.WriteAllText(Path.Combine(dest, Path.GetFileNameWithoutExtension(file) + ".cs"), a.ToFullString());
+                    var visitor = new TarsGrammarVisitor(file);
+                    var syntax = Formatter.Format(visitor.Visit(parser.tarsDefinition()), workspace);
+                    File.WriteAllText(Path.Combine(dest, Path.GetFileNameWithoutExtension(file) + ".cs"), syntax.ToFullString());
                 }
             }
         }

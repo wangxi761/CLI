@@ -31,17 +31,6 @@ using IToken = Antlr4.Runtime.IToken;
 [System.CodeDom.Compiler.GeneratedCode("ANTLR", "4.6.6-rc001")]
 public interface IGrammarListener : IParseTreeListener {
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="GrammarParser.tarsDefinitions"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void EnterTarsDefinitions([NotNull] GrammarParser.TarsDefinitionsContext context);
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="GrammarParser.tarsDefinitions"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void ExitTarsDefinitions([NotNull] GrammarParser.TarsDefinitionsContext context);
-
-	/// <summary>
 	/// Enter a parse tree produced by <see cref="GrammarParser.tarsDefinition"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>

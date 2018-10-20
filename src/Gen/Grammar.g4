@@ -1,11 +1,6 @@
 ﻿grammar Grammar;
 
-tarsDefinitions: tarsDefinition*;
-
-tarsDefinition
-    : includeDefinition
-    | moduleDefinition
-    ;
+tarsDefinition: includeDefinition* moduleDefinition*;
 
 includeDefinition: '#include' String;
 

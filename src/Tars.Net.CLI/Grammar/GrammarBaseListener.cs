@@ -35,19 +35,6 @@ using ParserRuleContext = Antlr4.Runtime.ParserRuleContext;
 [System.CodeDom.Compiler.GeneratedCode("ANTLR", "4.6.6-rc001")]
 public partial class GrammarBaseListener : IGrammarListener {
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="GrammarParser.tarsDefinitions"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void EnterTarsDefinitions([NotNull] GrammarParser.TarsDefinitionsContext context) { }
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="GrammarParser.tarsDefinitions"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void ExitTarsDefinitions([NotNull] GrammarParser.TarsDefinitionsContext context) { }
-
-	/// <summary>
 	/// Enter a parse tree produced by <see cref="GrammarParser.tarsDefinition"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
