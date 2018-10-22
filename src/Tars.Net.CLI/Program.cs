@@ -4,7 +4,7 @@ using System;
 
 namespace Tars.Net.CLI
 {
-    internal class Program
+    public class Program
     {
         private readonly IServiceProvider provider;
 
