@@ -1,5 +1,11 @@
 # CLI
 
+## install
+
+```
+dotnet tool install --global Tars.Net.CLI --version 0.0.1-beta-20181021132156
+```
+
 ## Commands
 
 ``` shell
