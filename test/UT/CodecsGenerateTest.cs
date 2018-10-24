@@ -43,7 +43,7 @@ namespace OnlyNamespace
 
 namespace OnlyNamespace.Test
 {
-}".ReplaceLine();
+}";
             var result = Generate("OnlyNamespace.tars");
             Assert.Equal(expected, result);
         }
@@ -63,7 +63,7 @@ namespace OnlyNamespace
     public class C
     {
     }
-}".ReplaceLine();
+}";
             var result = Generate("OnlyClass.tars");
             Assert.Equal(expected, result);
         }
@@ -93,7 +93,7 @@ namespace OnlyNamespace
         [TarsStructProperty(9)]
         public Dictionary<string, string> context { get; set; }
     }
-}".ReplaceLine();
+}";
             var result = Generate("OnlyField.tars");
             Assert.Equal(expected, result);
         }
@@ -116,7 +116,7 @@ namespace OnlyNamespace
         EM_CMD_PATCH,
         EM_CMD_UNINSTALL
     }
-}".ReplaceLine();
+}";
             var result = Generate("OnlyEnum.tars");
             Assert.Equal(expected, result);
         }
@@ -139,7 +139,7 @@ namespace OnlyNamespace
         Task<int> download(string file, int pos, byte[] vb);
         Task<int> preparePatchFile(string app, string serverName, string outpatchFile = ""test.cs"");
     }
-}".ReplaceLine();
+}";
             var result = Generate("OnlyInterface.tars");
             Assert.Equal(expected, result);
         }
@@ -156,17 +156,9 @@ using OnlyNamespace;
 
 namespace Test
 {
-}".ReplaceLine();
+}";
             var result = Generate("OnlyInclude.tars");
             Assert.Equal(expected, result);
-        }
-    }
-
-    public static class TestExtensions
-    {
-        public static string ReplaceLine(this string str)
-        {
-            return str.Replace("\r\n", System.Environment.NewLine);
         }
     }
 }
