@@ -43,8 +43,8 @@ namespace OnlyNamespace
 
 namespace OnlyNamespace.Test
 {
-}";
-            var result = Generate("OnlyNamespace.tars");
+}".ReplaceLine();
+            var result = Generate("OnlyNamespace.tars").ReplaceLine();
             Assert.Equal(expected, result);
         }
 
@@ -63,8 +63,8 @@ namespace OnlyNamespace
     public class C
     {
     }
-}";
-            var result = Generate("OnlyClass.tars");
+}".ReplaceLine();
+            var result = Generate("OnlyClass.tars").ReplaceLine();
             Assert.Equal(expected, result);
         }
 
@@ -93,8 +93,8 @@ namespace OnlyNamespace
         [TarsStructProperty(9)]
         public Dictionary<string, string> context { get; set; }
     }
-}";
-            var result = Generate("OnlyField.tars");
+}".ReplaceLine();
+            var result = Generate("OnlyField.tars").ReplaceLine();
             Assert.Equal(expected, result);
         }
 
@@ -116,8 +116,8 @@ namespace OnlyNamespace
         EM_CMD_PATCH,
         EM_CMD_UNINSTALL
     }
-}";
-            var result = Generate("OnlyEnum.tars");
+}".ReplaceLine();
+            var result = Generate("OnlyEnum.tars").ReplaceLine();
             Assert.Equal(expected, result);
         }
 
@@ -139,8 +139,8 @@ namespace OnlyNamespace
         Task<int> download(string file, int pos, byte[] vb);
         Task<int> preparePatchFile(string app, string serverName, string outpatchFile = ""test.cs"");
     }
-}";
-            var result = Generate("OnlyInterface.tars");
+}".ReplaceLine();
+            var result = Generate("OnlyInterface.tars").ReplaceLine();
             Assert.Equal(expected, result);
         }
 
@@ -156,9 +156,17 @@ using OnlyNamespace;
 
 namespace Test
 {
-}";
-            var result = Generate("OnlyInclude.tars");
+}".ReplaceLine();
+            var result = Generate("OnlyInclude.tars").ReplaceLine();
             Assert.Equal(expected, result);
+        }
+    }
+
+    public static class TestExtensions
+    {
+        public static string ReplaceLine(this string str)
+        {
+            return str.Replace("\r\n", "\n");
         }
     }
 }
