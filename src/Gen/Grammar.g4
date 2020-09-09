@@ -12,6 +12,16 @@ memberDefinition
     : enumDefinition
     | structDefinition
     | interfaceDefinition
+    | constDefinition
+    | keyDefinition
+    ;
+
+constDefinition
+    : 'const' typeDeclaration name '='? fieldValue? ';'
+    ;
+keyDefinition
+    : 'key' '[' name (',' name)* ']' ';'
+    | 'key' '['  ']' ';'
     ;
 
 moduleName
